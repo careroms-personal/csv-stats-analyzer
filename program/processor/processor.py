@@ -3,6 +3,7 @@ import yaml, sys
 from pathlib import Path
 from pydantic import ValidationError
 
+from .stats_analyze_executor import StatsAnalyzeExecutor
 from models.analyzer_config_models import *
 
 class Processor:
@@ -27,4 +28,6 @@ class Processor:
       sys.exit(1)
 
   def execute(self):
-    print(self.analyzer_config)
+    self.stats_analyze_executor = StatsAnalyzeExecutor(self.analyzer_config)
+    self.stats_analyzed_result = self.stats_analyze_executor.execute()
+    

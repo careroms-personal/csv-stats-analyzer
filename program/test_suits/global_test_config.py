@@ -5,7 +5,8 @@ CONFIG_TEMPLATES_PATH = "../config_templates/config.yaml"
 SAMPLE_ANALYZER_CONFIG = AnalyzerConfig(
   base_directory="./",
   csv_files=[
-    "sample_data.csv",
+    "sample_data_cpu.csv",
+    "sample_data_mem.csv",
   ],
   value_column_name=[
     "value",
@@ -15,7 +16,17 @@ SAMPLE_ANALYZER_CONFIG = AnalyzerConfig(
     "app_name",
   ],
   output_config=AnalyzerOutputConfig(
-    print_output=True
+    print_output=True,
+    write_output=[
+      AnalyzerOutputWriteConfig(
+        format=OutputFormatType.CSV,
+        output_dir="./result"
+      ),
+      AnalyzerOutputWriteConfig(
+        format=OutputFormatType.JSON,
+        output_dir="./result"
+      ),
+    ]
   ),
   stats_config=AnalyzerStatsConfig(
     percentiles=[

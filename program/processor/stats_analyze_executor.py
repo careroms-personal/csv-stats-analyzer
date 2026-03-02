@@ -1,4 +1,6 @@
 import pandas as pd
+
+from typing import Dict
 from pathlib import Path
 from models.analyzer_config_models import *
 
@@ -7,9 +9,13 @@ class StatsAnalyzeExecutor:
     self.analyzer_config = analyzer_config
     self.stats_config = analyzer_config.stats_config
 
-  def _analyze_data(self):
+  def _analyze_data(self) -> Dict[str, pd.DataFrame]:
+    execute_result = {}
+
     for file in self.analyzer_config.csv_files:
       df = pd.read_csv(Path(self.analyzer_config.base_directory) / file)
+
+      results = []
 
       for keys, group_df in df.groupby(self.analyzer_config.export_column_name):
         result = {}
@@ -32,8 +38,12 @@ class StatsAnalyzeExecutor:
           for pct in self.stats_config.percentiles:
             result[f"p{pct}"] = series.quantile(pct/100)
 
-        print(result)
+        results.append(result)
 
+      execute_result[file] = pd.DataFrame(results)
+
+    print(execute_result)
+    return execute_result
 
   def execute(self):
-    self._analyze_data()
+    return self._analyze_data()

@@ -36,5 +36,6 @@ class AnalyzerConfig(BaseModel):
   csv_files: List[str]
   value_column_name: List[str]
   export_column_name: Optional[List[str]] = None
+  merge_csv: bool = False
   output_config: Optional[AnalyzerOutputConfig] = None
   stats_config: AnalyzerStatsConfig

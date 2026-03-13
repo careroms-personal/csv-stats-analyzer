@@ -4,6 +4,7 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from .stats_analyze_executor import StatsAnalyzeExecutor
+from .raw_data_manage_executor import RawDataManageExecutor
 from models.analyzer_config_models import *
 
 from .output_exporter import OutputExecutor
@@ -30,8 +31,11 @@ class Processor:
       sys.exit(1)
 
   def execute(self):
-    self.stats_analyze_executor = StatsAnalyzeExecutor(self.analyzer_config)
+    self.raw_data_manage_executor = RawDataManageExecutor(self.analyzer_config)
+    self.raw_data = self.raw_data_manage_executor.execute()
+
+    self.stats_analyze_executor = StatsAnalyzeExecutor(self.analyzer_config, self.raw_data)
     self.stats_analyzed_result = self.stats_analyze_executor.execute()
-    
+
     self.output_executor = OutputExecutor(self.stats_analyzed_result, self.analyzer_config.output_config)
     self.output_executor.execute()

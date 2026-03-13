@@ -6,6 +6,8 @@ value_column_name: #Column that container volumne to analyze
 export_column_name: #Optional
   - "" #Conlumn that require to export along with analyzed data
 
+merge_csv: false
+
 #Optional
 output_config:
   print_output: false

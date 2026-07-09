@@ -17,13 +17,17 @@ class StatsAnalyzeExecutor:
 
   def _compute_stats(self, df: pd.DataFrame, value_col: str) -> pd.DataFrame:
     results = []
+    export_column_name = self.analyzer_config.export_column_name
 
-    for keys, group_df in df.groupby(self.analyzer_config.export_column_name):
+    groups = df.groupby(export_column_name) if export_column_name else [((), df)]
+
+    for keys, group_df in groups:
       result = {}
       series = group_df[value_col]
 
-      for col, key in zip(self.analyzer_config.export_column_name, keys):
-        result[col] = key
+      if export_column_name:
+        for col, key in zip(export_column_name, keys):
+          result[col] = key
 
       if self.stats_config.avg:
         result["avg"] = series.mean()
